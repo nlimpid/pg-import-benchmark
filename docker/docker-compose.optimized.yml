@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  postgres-optimized:
+    image: postgres:15
+    container_name: pg-benchmark-optimized
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+    command: |
+      postgres
+      -c fsync=off
+      -c synchronous_commit=off
+      -c full_page_writes=off
+      -c checkpoint_completion_target=0.9
+      -c wal_buffers=16MB
+      -c shared_buffers=256MB
+      -c max_wal_size=1GB
+      -c min_wal_size=80MB
+      -c effective_cache_size=1GB
+      -c random_page_cost=1.1
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

@@ -1,0 +1,5 @@
+# Generated SQL table files
+sql/tables/
+
+# Benchmark outputs
+results/

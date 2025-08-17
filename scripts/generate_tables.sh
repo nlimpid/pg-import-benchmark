@@ -1,11 +1,33 @@
 #!/bin/bash
 
-# 生成100张不同结构的表
+# 生成指定数量（默认100）的不同结构表
+# 用法：
+#   NUM_TABLES=100000 bash scripts/generate_tables.sh
+#   或：bash scripts/generate_tables.sh 100000
+
 OUTPUT_DIR="sql/tables"
 COMBINED_FILE="sql/schema.sql"
 
-mkdir -p $OUTPUT_DIR
-> $COMBINED_FILE
+# 读取目标表数量（参数优先，其次环境变量，默认100）
+NUM_TABLES=${1:-${NUM_TABLES:-100}}
+
+# 序号宽度，保证文件名对齐（最少3位）
+SEQ_WIDTH=${#NUM_TABLES}
+if [ "$SEQ_WIDTH" -lt 3 ]; then SEQ_WIDTH=3; fi
+
+# 进度步长，避免 10w 时刷屏
+if [ "$NUM_TABLES" -le 100 ]; then
+  PROGRESS_STEP=10
+elif [ "$NUM_TABLES" -le 1000 ]; then
+  PROGRESS_STEP=100
+elif [ "$NUM_TABLES" -le 10000 ]; then
+  PROGRESS_STEP=1000
+else
+  PROGRESS_STEP=10000
+fi
+
+mkdir -p "$OUTPUT_DIR"
+> "$COMBINED_FILE"
 
 # 数据类型数组
 TYPES=(
@@ -144,23 +166,24 @@ EOF
     echo ""
 }
 
-# 生成100张表
-echo "Generating 100 tables..."
-for i in {1..100}; do
-    table_sql=$(generate_table $i)
-    
-    # 保存到单独文件
-    echo "$table_sql" > "$OUTPUT_DIR/table_$(printf "%03d" $i).sql"
-    
+# 生成 N 张表
+echo "Generating ${NUM_TABLES} tables..."
+for ((i=1; i<=NUM_TABLES; i++)); do
+    table_sql=$(generate_table "$i")
+
+    # 保存到单独文件（带动态宽度前导0）
+    printf -v seq "%0${SEQ_WIDTH}d" "$i"
+    echo "$table_sql" > "${OUTPUT_DIR}/table_${seq}.sql"
+
     # 添加到组合文件
-    echo "$table_sql" >> $COMBINED_FILE
-    
+    echo "$table_sql" >> "$COMBINED_FILE"
+
     # 显示进度
-    if [ $((i % 10)) -eq 0 ]; then
-        echo "Generated $i tables..."
+    if [ $((i % PROGRESS_STEP)) -eq 0 ]; then
+        echo "Generated $i/${NUM_TABLES} tables..."
     fi
 done
 
-echo "✅ Generated 100 tables"
-echo "📁 Individual files in: $OUTPUT_DIR/"
-echo "📄 Combined schema in: $COMBINED_FILE"
+echo "✅ Generated ${NUM_TABLES} tables"
+echo "📁 Individual files in: ${OUTPUT_DIR}/"
+echo "📄 Combined schema in: ${COMBINED_FILE}"

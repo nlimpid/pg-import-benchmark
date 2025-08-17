@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+    inputs:
+      num_tables:
+        description: "Number of tables to generate (e.g. 100000)"
+        required: false
+        default: "100000"
 
 jobs:
   benchmark:
@@ -63,9 +68,12 @@ jobs:
         sudo apt-get install -y parallel
     
     - name: Generate table schemas
+      env:
+        # Use workflow_dispatch input if provided; otherwise default to 100000
+        NUM_TABLES: ${{ github.event.inputs.num_tables != '' && github.event.inputs.num_tables || '100000' }}
       run: |
         chmod +x scripts/generate_tables.sh
-        bash scripts/generate_tables.sh
+        bash scripts/generate_tables.sh "$NUM_TABLES"
     
     - name: Setup optimized PostgreSQL
       env:

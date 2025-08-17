@@ -42,20 +42,24 @@ echo "------------------------"
 # 3. 运行测试
 bash scripts/test_default.sh
 bash scripts/test_optimized.sh
-bash scripts/test_parallel.sh
+RESULT_FILE=results/default_parallel.txt bash scripts/test_parallel.sh
+RESULT_FILE=results/optimized_parallel.txt bash scripts/test_parallel.sh
 bash scripts/test_template.sh
 bash scripts/test_tmpfs.sh
+RESULT_FILE=results/tmpfs_parallel.txt DB_PORT=5434 bash scripts/test_parallel.sh
 
 echo ""
 echo "📊 Benchmark Results"
 echo "===================="
 
 # 4. 读取并显示结果
-DEFAULT_TIME=$(cat results/default_sequential.txt 2>/dev/null || echo "N/A")
-OPTIMIZED_TIME=$(cat results/optimized_sequential.txt 2>/dev/null || echo "N/A")
-PARALLEL_TIME=$(cat results/parallel.txt 2>/dev/null || echo "N/A")
+DEFAULT_SEQ=$(cat results/default_sequential.txt 2>/dev/null || echo "N/A")
+DEFAULT_PAR=$(cat results/default_parallel.txt 2>/dev/null || echo "N/A")
+OPTIMIZED_SEQ=$(cat results/optimized_sequential.txt 2>/dev/null || echo "N/A")
+OPTIMIZED_PAR=$(cat results/optimized_parallel.txt 2>/dev/null || echo "N/A")
+TMPFS_SEQ=$(cat results/tmpfs_sequential.txt 2>/dev/null || echo "N/A")
+TMPFS_PAR=$(cat results/tmpfs_parallel.txt 2>/dev/null || echo "N/A")
 TEMPLATE_TIME=$(cat results/template.txt 2>/dev/null || echo "N/A")
-TMPFS_TIME=$(cat results/tmpfs.txt 2>/dev/null || echo "N/A")
 
 # 创建结果表格
 cat > results/summary.md <<EOF
@@ -69,13 +73,14 @@ cat > results/summary.md <<EOF
 
 ## Results
 
-| Configuration | Method | Time (ms) | Relative Speed |
+| Configuration | Method | Time (ms) | Relative to Default Sequential |
 |--------------|--------|-----------|----------------|
-| Default | Sequential | ${DEFAULT_TIME} | 1.0x (baseline) |
-| Optimized | Sequential | ${OPTIMIZED_TIME} | $(echo "scale=2; $DEFAULT_TIME / $OPTIMIZED_TIME" | bc)x |
-| Optimized | Parallel | ${PARALLEL_TIME} | $(echo "scale=2; $DEFAULT_TIME / $PARALLEL_TIME" | bc)x |
-| Optimized | Template DB | ${TEMPLATE_TIME} | $(echo "scale=2; $DEFAULT_TIME / $TEMPLATE_TIME" | bc)x |
-| TMPFS | Sequential | ${TMPFS_TIME} | $(echo "scale=2; $DEFAULT_TIME / $TMPFS_TIME" | bc)x |
+| Default | Sequential | ${DEFAULT_SEQ} | 1.0x (baseline) |
+| Default | Parallel | ${DEFAULT_PAR} | $(echo "scale=2; $DEFAULT_SEQ / $DEFAULT_PAR" | bc)x |
+| Optimized | Sequential | ${OPTIMIZED_SEQ} | $(echo "scale=2; $DEFAULT_SEQ / $OPTIMIZED_SEQ" | bc)x |
+| Optimized | Parallel | ${OPTIMIZED_PAR} | $(echo "scale=2; $DEFAULT_SEQ / $OPTIMIZED_PAR" | bc)x |
+| TMPFS | Sequential | ${TMPFS_SEQ} | $(echo "scale=2; $DEFAULT_SEQ / $TMPFS_SEQ" | bc)x |
+| TMPFS | Parallel | ${TMPFS_PAR} | $(echo "scale=2; $DEFAULT_SEQ / $TMPFS_PAR" | bc)x |
 
 ## Configuration Details
 
@@ -103,11 +108,8 @@ shared_buffers=256MB
 
 ## Conclusions
 
-1. **Template Database** is the fastest method (~${TEMPLATE_TIME}ms)
-2. **TMPFS** provides significant speedup (~${TMPFS_TIME}ms)
-3. **Parallel creation** improves performance (~${PARALLEL_TIME}ms)
-4. **Configuration optimization** alone gives good improvement (~${OPTIMIZED_TIME}ms)
-5. **Default configuration** is slowest (~${DEFAULT_TIME}ms)
+1. 2×3 matrix covered: Default/Optimized/TMPFS × Sequential/Parallel
+2. Template DB creation time (separate): ~${TEMPLATE_TIME}ms
 EOF
 
 # 打印结果

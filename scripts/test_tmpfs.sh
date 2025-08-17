@@ -28,7 +28,7 @@ END_TIME=$(date +%s%N)
 DURATION=$(( ($END_TIME - $START_TIME) / 1000000 ))
 
 echo "✅ TMPFS Sequential: ${DURATION}ms"
-echo "${DURATION}" > results/tmpfs.txt
+echo "${DURATION}" > results/tmpfs_sequential.txt
 
 # 清理
 psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d postgres -c "DROP DATABASE test_tmpfs;"

@@ -8,6 +8,7 @@ DB_USER=${DB_USER:-postgres}
 DB_PASS=${DB_PASS:-postgres}
 
 export PGPASSWORD=$DB_PASS
+RESULT_FILE=${RESULT_FILE:-results/parallel.txt}
 
 echo "⚡ Testing PARALLEL creation"
 
@@ -34,7 +35,7 @@ END_TIME=$(date +%s%N)
 DURATION=$(( ($END_TIME - $START_TIME) / 1000000 ))
 
 echo "✅ PARALLEL Creation: ${DURATION}ms"
-echo "${DURATION}" > results/parallel.txt
+echo "${DURATION}" > "${RESULT_FILE}"
 
 # 清理
 psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d postgres -c "DROP DATABASE test_parallel;"

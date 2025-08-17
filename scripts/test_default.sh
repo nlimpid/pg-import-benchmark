@@ -44,4 +44,4 @@ TABLE_COUNT=$(psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d test_default -t -c "SE
 echo "📦 Tables created: ${TABLE_COUNT}"
 
 # 清理
-# psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d postgres -c "DROP DATABASE test_default;"
+psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d postgres -c "DROP DATABASE test_default;"

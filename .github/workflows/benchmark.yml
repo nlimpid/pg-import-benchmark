@@ -10,7 +10,7 @@ on:
       num_tables:
         description: "Number of tables to generate (e.g. 100000)"
         required: false
-        default: "100000"
+        default: "10000"
 
 jobs:
   benchmark:

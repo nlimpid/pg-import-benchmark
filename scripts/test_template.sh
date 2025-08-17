@@ -17,25 +17,25 @@ psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d postgres -c "DROP DATABASE IF EXISTS
 psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d postgres -c "CREATE DATABASE test_template;"
 
 # 在模板中创建所有表
-TEMPLATE_START=$(date +%s%N)
+TEMPLATE_START=$(date +%s)
 psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d test_template -f sql/schema.sql > /dev/null 2>&1
-TEMPLATE_END=$(date +%s%N)
-TEMPLATE_DURATION=$(( ($TEMPLATE_END - $TEMPLATE_START) / 1000000 ))
-echo "  Template preparation: ${TEMPLATE_DURATION}ms"
+TEMPLATE_END=$(date +%s)
+TEMPLATE_DURATION=$(( TEMPLATE_END - TEMPLATE_START ))
+echo "  Template preparation: ${TEMPLATE_DURATION}s"
 
 # 标记为模板
 psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d postgres -c "ALTER DATABASE test_template WITH is_template = true ALLOW_CONNECTIONS = false;"
 
 # 测试基于模板创建新数据库
 echo "  Creating database from template..."
-START_TIME=$(date +%s%N)
+START_TIME=$(date +%s)
 
 psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d postgres -c "CREATE DATABASE test_from_template WITH TEMPLATE test_template;"
 
-END_TIME=$(date +%s%N)
-DURATION=$(( ($END_TIME - $START_TIME) / 1000000 ))
+END_TIME=$(date +%s)
+DURATION=$(( END_TIME - START_TIME ))
 
-echo "✅ TEMPLATE Database Creation: ${DURATION}ms"
+echo "✅ TEMPLATE Database Creation: ${DURATION}s"
 echo "${DURATION}" > results/template.txt
 
 # 验证表是否存在

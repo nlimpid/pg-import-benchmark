@@ -1,20 +1,19 @@
 CREATE TABLE IF NOT EXISTS table_078 (
     id BIGSERIAL PRIMARY KEY,
     uuid_col UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL,
-    col_1_real REAL,
-    col_2_cidr CIDR,
-    col_3_integer INTEGER,
-    col_4_decimal_10_2_ DECIMAL(10,2),
-    col_5_integer INTEGER NOT NULL,
-    col_6_date DATE DEFAULT CURRENT_DATE,
-    col_7_inet INET NOT NULL,
-    col_8_integer INTEGER NOT NULL,
-    col_9_double_precision DOUBLE PRECISION NOT NULL,
-    col_10_macaddr MACADDR NOT NULL,
-    col_11_time TIME,
-    col_12_date DATE,
-    col_13_inet INET,
-    col_14_json JSON
+    col_1_json JSON,
+    col_2_timestamp TIMESTAMP,
+    col_3_char_10_ CHAR(10),
+    col_4_time TIME NOT NULL,
+    col_5_bytea BYTEA,
+    col_6_bytea BYTEA,
+    col_7_integer INTEGER NOT NULL DEFAULT 0,
+    col_8_integer INTEGER NOT NULL DEFAULT 0,
+    col_9_macaddr MACADDR,
+    col_10_inet INET NOT NULL,
+    col_11_char_10_ CHAR(10)
 );
-CREATE INDEX idx_table_078_col13 ON table_078 (col_13_varchar_255_);
-CREATE INDEX idx_table_078_col1 ON table_078 (col_1_bytea);
+CREATE INDEX idx_table_078_col8_1 ON table_078 (col_8_integer);
+CREATE INDEX idx_table_078_col7_2 ON table_078 (col_7_integer);
+CREATE INDEX idx_table_078_col2_3 ON table_078 (col_2_timestamp);
+ALTER TABLE table_078 ADD CONSTRAINT uk_table_078_col10 UNIQUE (col_10_inet);

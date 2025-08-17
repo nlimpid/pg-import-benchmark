@@ -1,22 +1,21 @@
 CREATE TABLE IF NOT EXISTS table_049 (
     id BIGSERIAL PRIMARY KEY,
     uuid_col UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL,
-    col_1_real REAL,
-    col_2_decimal_10_2_ DECIMAL(10,2),
-    col_3_integer INTEGER,
-    col_4_uuid UUID,
-    col_5_json JSON,
-    col_6_macaddr MACADDR,
-    col_7_uuid UUID,
-    col_8_jsonb JSONB NOT NULL,
-    col_9_char_10_ CHAR(10),
-    col_10_bigint BIGINT NOT NULL,
-    col_11_jsonb JSONB,
-    col_12_bytea BYTEA NOT NULL,
-    col_13_date DATE,
-    col_14_inet INET NOT NULL
+    col_1_text TEXT NOT NULL DEFAULT '',
+    col_2_bigint BIGINT,
+    col_3_inet INET NOT NULL,
+    col_4_char_10_ CHAR(10) DEFAULT '',
+    col_5_real REAL,
+    col_6_inet INET,
+    col_7_jsonb JSONB,
+    col_8_varchar_255_ VARCHAR(255),
+    col_9_jsonb JSONB NOT NULL,
+    col_10_time TIME,
+    col_11_text TEXT NOT NULL,
+    col_12_double_precision DOUBLE PRECISION,
+    col_13_time TIME,
+    col_14_numeric_15_4_ NUMERIC(15,4),
+    col_15_bigint BIGINT DEFAULT 0
 );
-CREATE INDEX idx_table_049_col1 ON table_049 (col_1_numeric_15_4_);
-CREATE INDEX idx_table_049_col8 ON table_049 (col_8_decimal_10_2_);
-CREATE INDEX idx_table_049_col3 ON table_049 (col_3_inet);
-CREATE INDEX idx_table_049_col12 ON table_049 (col_12_bytea);
+CREATE INDEX idx_table_049_col14_1 ON table_049 (col_14_numeric_15_4_);
+CREATE INDEX idx_table_049_col2_2 ON table_049 (col_2_bigint);

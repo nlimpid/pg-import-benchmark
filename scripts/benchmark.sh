@@ -73,7 +73,7 @@ cat > results/summary.md <<EOF
 
 ## Results
 
-| Configuration | Method | Time (ms) | Relative to Default Sequential |
+| Configuration | Method | Time (s) | Relative to Default Sequential |
 |--------------|--------|-----------|----------------|
 | Default | Sequential | ${DEFAULT_SEQ} | 1.0x (baseline) |
 | Default | Parallel | ${DEFAULT_PAR} | $(echo "scale=2; $DEFAULT_SEQ / $DEFAULT_PAR" | bc)x |
@@ -109,7 +109,7 @@ shared_buffers=256MB
 ## Conclusions
 
 1. 2×3 matrix covered: Default/Optimized/TMPFS × Sequential/Parallel
-2. Template DB creation time (separate): ~${TEMPLATE_TIME}ms
+2. Template DB creation time (separate): ~${TEMPLATE_TIME}s
 EOF
 
 # 打印结果

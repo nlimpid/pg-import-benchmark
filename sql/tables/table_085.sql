@@ -1,18 +1,17 @@
 CREATE TABLE IF NOT EXISTS table_085 (
     id BIGSERIAL PRIMARY KEY,
     uuid_col UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL,
-    col_1_text TEXT NOT NULL,
-    col_2_integer INTEGER DEFAULT 0,
-    col_3_bigint BIGINT,
-    col_4_char_10_ CHAR(10),
-    col_5_char_10_ CHAR(10),
-    col_6_inet INET NOT NULL,
-    col_7_varchar_255_ VARCHAR(255),
-    col_8_bytea BYTEA NOT NULL,
-    col_9_decimal_10_2_ DECIMAL(10,2),
-    col_10_numeric_15_4_ NUMERIC(15,4) NOT NULL,
-    col_11_bigint BIGINT DEFAULT 0
+    col_1_json JSON DEFAULT '{}',
+    col_2_char_10_ CHAR(10),
+    col_3_real REAL,
+    col_4_cidr CIDR NOT NULL,
+    col_5_decimal_10_2_ DECIMAL(10,2),
+    col_6_real REAL NOT NULL,
+    col_7_text TEXT NOT NULL,
+    col_8_double_precision DOUBLE PRECISION NOT NULL,
+    col_9_jsonb JSONB NOT NULL DEFAULT '{}',
+    col_10_jsonb JSONB,
+    col_11_timestamp TIMESTAMP
 );
-CREATE INDEX idx_table_085_col9 ON table_085 (col_9_uuid);
-CREATE INDEX idx_table_085_col8 ON table_085 (col_8_time);
-ALTER TABLE table_085 ADD CONSTRAINT uk_table_085_col6 UNIQUE (col_6_decimal_10_2_);
+CREATE INDEX idx_table_085_col3_1 ON table_085 (col_3_real);
+CREATE INDEX idx_table_085_col8_2 ON table_085 (col_8_double_precision);

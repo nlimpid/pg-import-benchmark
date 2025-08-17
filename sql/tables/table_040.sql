@@ -1,16 +1,17 @@
 CREATE TABLE IF NOT EXISTS table_040 (
     id BIGSERIAL PRIMARY KEY,
     uuid_col UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL,
-    col_1_bytea BYTEA,
-    col_2_macaddr MACADDR NOT NULL,
-    col_3_numeric_15_4_ NUMERIC(15,4),
-    col_4_integer INTEGER,
-    col_5_decimal_10_2_ DECIMAL(10,2) NOT NULL,
-    col_6_json JSON,
-    col_7_uuid UUID
+    col_1_jsonb JSONB DEFAULT '{}',
+    col_2_time TIME NOT NULL,
+    col_3_double_precision DOUBLE PRECISION,
+    col_4_jsonb JSONB DEFAULT '{}',
+    col_5_date DATE DEFAULT CURRENT_DATE,
+    col_6_time TIME,
+    col_7_date DATE DEFAULT CURRENT_DATE,
+    col_8_macaddr MACADDR,
+    col_9_time TIME,
+    col_10_varchar_255_ VARCHAR(255) NOT NULL DEFAULT ''
 );
-CREATE INDEX idx_table_040_col3 ON table_040 (col_3_real);
-CREATE INDEX idx_table_040_col7 ON table_040 (col_7_bytea);
-CREATE INDEX idx_table_040_col3 ON table_040 (col_3_numeric_15_4_);
-CREATE INDEX idx_table_040_col5 ON table_040 (col_5_date);
-ALTER TABLE table_040 ADD CONSTRAINT uk_table_040_col5 UNIQUE (col_5_char_10_);
+CREATE INDEX idx_table_040_col9_1 ON table_040 (col_9_time);
+CREATE INDEX idx_table_040_col5_2 ON table_040 (col_5_date);
+CREATE INDEX idx_table_040_col4_3_gin ON table_040 USING GIN (col_4_jsonb);

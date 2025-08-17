@@ -1,13 +1,11 @@
 CREATE TABLE IF NOT EXISTS table_039 (
     id BIGSERIAL PRIMARY KEY,
     uuid_col UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL,
-    col_1_integer INTEGER,
-    col_2_integer INTEGER,
-    col_3_char_10_ CHAR(10),
-    col_4_uuid UUID,
-    col_5_bytea BYTEA NOT NULL,
-    col_6_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    col_1_json JSON DEFAULT '{}',
+    col_2_time TIME NOT NULL,
+    col_3_bytea BYTEA,
+    col_4_text TEXT,
+    col_5_numeric_15_4_ NUMERIC(15,4),
+    col_6_char_10_ CHAR(10) NOT NULL
 );
-CREATE INDEX idx_table_039_col1 ON table_039 (col_1_text);
-CREATE INDEX idx_table_039_col4 ON table_039 (col_4_json);
-CREATE INDEX idx_table_039_col1 ON table_039 (col_1_cidr);
+CREATE INDEX idx_table_039_col3_3 ON table_039 (col_3_bytea);

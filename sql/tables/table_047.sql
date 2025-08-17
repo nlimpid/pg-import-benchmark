@@ -1,22 +1,18 @@
 CREATE TABLE IF NOT EXISTS table_047 (
     id BIGSERIAL PRIMARY KEY,
     uuid_col UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL,
-    col_1_char_10_ CHAR(10) NOT NULL DEFAULT '',
-    col_2_macaddr MACADDR,
-    col_3_char_10_ CHAR(10),
-    col_4_varchar_255_ VARCHAR(255),
-    col_5_bigint BIGINT DEFAULT 0,
-    col_6_json JSON DEFAULT '{}',
-    col_7_real REAL,
-    col_8_double_precision DOUBLE PRECISION NOT NULL,
-    col_9_inet INET,
-    col_10_inet INET,
-    col_11_numeric_15_4_ NUMERIC(15,4) NOT NULL,
-    col_12_double_precision DOUBLE PRECISION,
-    col_13_jsonb JSONB NOT NULL,
-    col_14_decimal_10_2_ DECIMAL(10,2),
-    col_15_cidr CIDR
+    col_1_time TIME,
+    col_2_real REAL NOT NULL,
+    col_3_text TEXT DEFAULT '',
+    col_4_inet INET,
+    col_5_text TEXT,
+    col_6_bigint BIGINT,
+    col_7_varchar_255_ VARCHAR(255) NOT NULL DEFAULT '',
+    col_8_inet INET NOT NULL,
+    col_9_integer INTEGER NOT NULL,
+    col_10_time TIME NOT NULL
 );
-CREATE INDEX idx_table_047_col13 ON table_047 (col_13_decimal_10_2_);
-CREATE INDEX idx_table_047_col3 ON table_047 (col_3_char_10_);
-CREATE INDEX idx_table_047_col9 ON table_047 (col_9_inet);
+CREATE INDEX idx_table_047_col9_1 ON table_047 (col_9_integer);
+CREATE INDEX idx_table_047_col9_2 ON table_047 (col_9_integer);
+CREATE INDEX idx_table_047_col6_3 ON table_047 (col_6_bigint);
+ALTER TABLE table_047 ADD CONSTRAINT uk_table_047_col6 UNIQUE (col_6_bigint);

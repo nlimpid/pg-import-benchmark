@@ -1,16 +1,19 @@
 CREATE TABLE IF NOT EXISTS table_074 (
     id BIGSERIAL PRIMARY KEY,
     uuid_col UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL,
-    col_1_char_10_ CHAR(10),
-    col_2_bytea BYTEA,
-    col_3_integer INTEGER NOT NULL,
-    col_4_macaddr MACADDR,
-    col_5_bigint BIGINT,
-    col_6_decimal_10_2_ DECIMAL(10,2),
-    col_7_char_10_ CHAR(10),
-    col_8_inet INET NOT NULL,
-    col_9_boolean BOOLEAN NOT NULL DEFAULT false,
-    col_10_inet INET
+    col_1_time TIME,
+    col_2_real REAL NOT NULL,
+    col_3_boolean BOOLEAN,
+    col_4_double_precision DOUBLE PRECISION,
+    col_5_numeric_15_4_ NUMERIC(15,4),
+    col_6_real REAL,
+    col_7_cidr CIDR,
+    col_8_bytea BYTEA,
+    col_9_uuid UUID,
+    col_10_integer INTEGER NOT NULL DEFAULT 0,
+    col_11_bigint BIGINT
 );
-CREATE INDEX idx_table_074_col8 ON table_074 (col_8_text);
-CREATE INDEX idx_table_074_col8 ON table_074 (col_8_double_precision);
+CREATE INDEX idx_table_074_col11_1 ON table_074 (col_11_bigint);
+CREATE INDEX idx_table_074_col2_2 ON table_074 (col_2_real);
+CREATE INDEX idx_table_074_col7_3 ON table_074 (col_7_cidr);
+CREATE INDEX idx_table_074_col10_4 ON table_074 (col_10_integer);

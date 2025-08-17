@@ -1,17 +1,15 @@
 CREATE TABLE IF NOT EXISTS table_005 (
     id BIGSERIAL PRIMARY KEY,
     uuid_col UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL,
-    col_1_boolean BOOLEAN,
+    col_1_inet INET,
     col_2_numeric_15_4_ NUMERIC(15,4),
-    col_3_time TIME,
-    col_4_double_precision DOUBLE PRECISION,
-    col_5_macaddr MACADDR,
-    col_6_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    col_7_decimal_10_2_ DECIMAL(10,2) NOT NULL,
-    col_8_cidr CIDR,
-    col_9_bigint BIGINT NOT NULL
+    col_3_uuid UUID,
+    col_4_boolean BOOLEAN NOT NULL,
+    col_5_inet INET,
+    col_6_jsonb JSONB DEFAULT '{}',
+    col_7_char_10_ CHAR(10),
+    col_8_bigint BIGINT,
+    col_9_timestamp TIMESTAMP
 );
-CREATE INDEX idx_table_005_col3 ON table_005 (col_3_date);
-CREATE INDEX idx_table_005_col7 ON table_005 (col_7_integer);
-CREATE INDEX idx_table_005_col4 ON table_005 (col_4_date);
-CREATE INDEX idx_table_005_col1 ON table_005 (col_1_char_10_);
+CREATE INDEX idx_table_005_col5_1 ON table_005 (col_5_inet);
+CREATE INDEX idx_table_005_col4_2 ON table_005 (col_4_boolean);

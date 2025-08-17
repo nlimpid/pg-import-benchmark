@@ -1,15 +1,21 @@
 CREATE TABLE IF NOT EXISTS table_025 (
     id BIGSERIAL PRIMARY KEY,
     uuid_col UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL,
-    col_1_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    col_2_double_precision DOUBLE PRECISION,
-    col_3_varchar_255_ VARCHAR(255) NOT NULL,
-    col_4_inet INET,
-    col_5_numeric_15_4_ NUMERIC(15,4),
-    col_6_decimal_10_2_ DECIMAL(10,2),
-    col_7_bigint BIGINT
+    col_1_char_10_ CHAR(10),
+    col_2_bytea BYTEA,
+    col_3_time TIME,
+    col_4_time TIME,
+    col_5_inet INET NOT NULL,
+    col_6_double_precision DOUBLE PRECISION,
+    col_7_timestamp TIMESTAMP,
+    col_8_date DATE,
+    col_9_integer INTEGER,
+    col_10_bigint BIGINT,
+    col_11_char_10_ CHAR(10) DEFAULT '',
+    col_12_bytea BYTEA NOT NULL,
+    col_13_bigint BIGINT,
+    col_14_text TEXT DEFAULT '',
+    col_15_inet INET
 );
-CREATE INDEX idx_table_025_col5 ON table_025 (col_5_uuid);
-CREATE INDEX idx_table_025_col3 ON table_025 (col_3_boolean);
-CREATE INDEX idx_table_025_col3 ON table_025 (col_3_integer);
-ALTER TABLE table_025 ADD CONSTRAINT uk_table_025_col6 UNIQUE (col_6_date);
+CREATE INDEX idx_table_025_col12_1 ON table_025 (col_12_bytea);
+CREATE INDEX idx_table_025_col3_2 ON table_025 (col_3_time);

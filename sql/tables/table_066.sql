@@ -1,17 +1,15 @@
 CREATE TABLE IF NOT EXISTS table_066 (
     id BIGSERIAL PRIMARY KEY,
     uuid_col UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL,
-    col_1_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    col_2_varchar_255_ VARCHAR(255),
-    col_3_double_precision DOUBLE PRECISION NOT NULL,
-    col_4_cidr CIDR,
-    col_5_macaddr MACADDR,
-    col_6_time TIME,
-    col_7_time TIME,
-    col_8_inet INET,
-    col_9_decimal_10_2_ DECIMAL(10,2),
-    col_10_integer INTEGER DEFAULT 0
+    col_1_date DATE,
+    col_2_json JSON,
+    col_3_real REAL,
+    col_4_macaddr MACADDR NOT NULL,
+    col_5_real REAL,
+    col_6_macaddr MACADDR,
+    col_7_jsonb JSONB,
+    col_8_boolean BOOLEAN
 );
-CREATE INDEX idx_table_066_col9 ON table_066 (col_9_time);
-CREATE INDEX idx_table_066_col3 ON table_066 (col_3_varchar_255_);
-CREATE INDEX idx_table_066_col7 ON table_066 (col_7_macaddr);
+CREATE INDEX idx_table_066_col7_2_gin ON table_066 USING GIN (col_7_jsonb);
+CREATE INDEX idx_table_066_col1_3 ON table_066 (col_1_date);
+ALTER TABLE table_066 ADD CONSTRAINT uk_table_066_col1 UNIQUE (col_1_date);

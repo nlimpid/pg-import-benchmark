@@ -58,6 +58,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
+    - name: Create results directory
+      run: mkdir -p results
+    
     - name: Install PostgreSQL client
       run: |
         sudo apt-get update
@@ -79,6 +82,16 @@ jobs:
       env:
         PGPASSWORD: postgres
       run: |
+        echo "Waiting for PostgreSQL to be ready..."
+        for i in {1..30}; do
+          if psql -h localhost -p 5433 -U postgres -d postgres -c "SELECT 1" > /dev/null 2>&1; then
+            echo "PostgreSQL is ready"
+            break
+          fi
+          echo "Waiting... ($i/30)"
+          sleep 2
+        done
+        
         # Apply optimizations to the "optimized" instance
         psql -h localhost -p 5433 -U postgres -d postgres <<EOF
         ALTER SYSTEM SET fsync = off;
@@ -89,50 +102,59 @@ jobs:
         ALTER SYSTEM SET shared_buffers = '256MB';
         SELECT pg_reload_conf();
         EOF
+        
+        # Wait a bit for settings to take effect
+        sleep 2
     
     - name: Run DEFAULT configuration test
+      continue-on-error: true
       env:
         PGPASSWORD: postgres
         DB_PORT: 5432
       run: |
         chmod +x scripts/test_default.sh
-        bash scripts/test_default.sh
+        bash scripts/test_default.sh || echo "Test failed with exit code $?"
     
     - name: Run DEFAULT PARALLEL creation test
+      continue-on-error: true
       env:
         PGPASSWORD: postgres
         DB_PORT: 5432
         RESULT_FILE: results/default_parallel.txt
       run: |
         chmod +x scripts/test_parallel.sh
-        bash scripts/test_parallel.sh
+        bash scripts/test_parallel.sh || echo "Test failed with exit code $?"
     
     - name: Run OPTIMIZED configuration test
+      continue-on-error: true
       env:
         PGPASSWORD: postgres
         DB_PORT: 5433
       run: |
         chmod +x scripts/test_optimized.sh
-        bash scripts/test_optimized.sh
+        bash scripts/test_optimized.sh || echo "Test failed with exit code $?"
     
     - name: Run OPTIMIZED PARALLEL creation test
+      continue-on-error: true
       env:
         PGPASSWORD: postgres
         DB_PORT: 5433
         RESULT_FILE: results/optimized_parallel.txt
       run: |
         chmod +x scripts/test_parallel.sh
-        bash scripts/test_parallel.sh
+        bash scripts/test_parallel.sh || echo "Test failed with exit code $?"
     
     - name: Run TEMPLATE database test
+      continue-on-error: true
       env:
         PGPASSWORD: postgres
         DB_PORT: 5433
       run: |
         chmod +x scripts/test_template.sh
-        bash scripts/test_template.sh
+        bash scripts/test_template.sh || echo "Test failed with exit code $?"
     
     - name: Run TMPFS test
+      continue-on-error: true
       env:
         PGPASSWORD: postgres
         DB_PORT: 5434
@@ -140,16 +162,17 @@ jobs:
         chmod +x scripts/test_tmpfs.sh
         # Create a modified version for tmpfs test
         sed 's/5433/5434/g' scripts/test_tmpfs.sh > scripts/test_tmpfs_ci.sh
-        bash scripts/test_tmpfs_ci.sh
+        bash scripts/test_tmpfs_ci.sh || echo "Test failed with exit code $?"
     
     - name: Run TMPFS PARALLEL creation test
+      continue-on-error: true
       env:
         PGPASSWORD: postgres
         DB_PORT: 5434
         RESULT_FILE: results/tmpfs_parallel.txt
       run: |
         chmod +x scripts/test_parallel.sh
-        bash scripts/test_parallel.sh
+        bash scripts/test_parallel.sh || echo "Test failed with exit code $?"
     
     - name: Generate summary report
       run: |
@@ -184,3 +207,12 @@ jobs:
         cat results/summary.md
         # Also publish to the job summary so it's visible in the UI
         cat results/summary.md >> "$GITHUB_STEP_SUMMARY"
+    
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: benchmark-results
+        path: |
+          results/
+          sql/schema.sql

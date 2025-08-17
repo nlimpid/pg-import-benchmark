@@ -10,7 +10,7 @@ on:
       num_tables:
         description: "Number of tables to generate (e.g. 100000)"
         required: false
-        default: "10000"
+        default: 10000
 
 jobs:
   benchmark:
@@ -70,7 +70,7 @@ jobs:
     - name: Generate table schemas
       env:
         # Use workflow_dispatch input if provided; otherwise default to 100000
-        NUM_TABLES: ${{ github.event.inputs.num_tables != '' && github.event.inputs.num_tables || '100000' }}
+        NUM_TABLES: ${{ github.event.inputs.num_tables != '' && github.event.inputs.num_tables || '10000' }}
       run: |
         chmod +x scripts/generate_tables.sh
         bash scripts/generate_tables.sh "$NUM_TABLES"
